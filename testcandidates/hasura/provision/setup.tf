@@ -51,7 +51,7 @@ resource "aws_db_instance" "postgres_rds" {
 
 resource "aws_instance" "hasura_graphql_engine" {
   depends_on                  = ["aws_db_instance.postgres_rds"]
-  ami                         = "ami-d2f489aa"
+  ami                         = "ami-ba602bc2"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
   key_name                    = "aws-bench"
@@ -66,11 +66,11 @@ resource "aws_instance" "hasura_graphql_engine" {
     inline = [
       "echo -n postgres://${aws_db_instance.postgres_rds.username}:${aws_db_instance.postgres_rds.password}@${aws_db_instance.postgres_rds.address}:${aws_db_instance.postgres_rds.port}/${aws_db_instance.postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
-			"sudo chmod +x ~ec2-user/aws-benchmarks/testcandidates/hasura/provision/test.sh",
-      "~ec2-user/aws-benchmarks/testcandidates/hasura/provision/test.sh"
+			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/hasura/provision/test.sh",
+      "~ubuntu/aws-benchmarks/testcandidates/hasura/provision/test.sh"
     ]
     connection {
-      user = "ec2-user"
+      user = "ubuntu"
       private_key = "${file("~/.ssh/aws-bench.pem")}"
     }
   }
