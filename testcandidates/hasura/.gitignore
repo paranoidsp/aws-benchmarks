@@ -1,2 +1,2 @@
 creds.tf
-provision/*.tfstate.*
+provision/*.tfstate*
