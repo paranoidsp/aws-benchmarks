@@ -67,7 +67,7 @@ resource "aws_instance" "hasura_graphql_engine" {
   }
 
   provisioner "local-exec" {
-    command = "./graphql-server.sh start" 
+    command = "~/aws_benchmarks/testcandidates/hasura/graphql-server.sh start" 
   }
 }
 
