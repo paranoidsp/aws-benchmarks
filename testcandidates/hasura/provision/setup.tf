@@ -65,7 +65,7 @@ resource "aws_instance" "hasura_graphql_engine" {
   provisioner "remote-exec" {
     inline = [
       "echo -n postgres://${aws_db_instance.postgres_rds.username}:${aws_db_instance.postgres_rds.password}@${aws_db_instance.postgres_rds.address}:${aws_db_instance.postgres_rds.port}/${aws_db_instance.postgres_rds.name} > ~/postgres_credentials",
-      "~ec2-user/provision/test.sh"
+      "~ec2-user/aws-benchmarks/testcandidates/hasura/provision/test.sh"
     ]
     connection {
       user = "ec2-user"

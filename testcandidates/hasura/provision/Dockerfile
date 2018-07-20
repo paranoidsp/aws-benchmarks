@@ -1,7 +1,7 @@
 FROM hasura/graphql-engine:v1.0.0-alpha0
 
 CMD graphql-engine \
-    --database-url $DATABASE_URL \
+    --database-url $(cat ~/postgres_credentials) \
     serve \
-    --server-port $PORT \
+    --server-port 8080 \
     --cors-domain "http://localhost:9695"
