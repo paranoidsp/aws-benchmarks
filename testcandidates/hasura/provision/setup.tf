@@ -30,48 +30,70 @@ resource "aws_security_group" "graphql_bench" {
 
 }
 
-resource "aws_db_instance" "hasura_postgres_rds" {
-  name                 = "hasura_postgres_rds"
-  allocated_storage    = 10
-  storage_type         = "gp2"
-  engine               = "postgresql"
-  engine_version       = "10.3"
-  database_name        = "chinook"
-  instance_class       = "db.m3.xlarge"
-  username             = "admin"
-  password             = "unsecured"
-  port                 = "5432"
-  parameter_group_name = "postgres10-benchmark"
-  vpc_security_group_ids = ["${data.aws_security_group.graphql_bench.id}"]
-  backup_retention_period = 0
+resource "aws_db_instance" "postgres_rds" {
+  skip_final_snapshot        = true
+  allocated_storage          = 10
+  storage_type               = "gp2"
+  engine                     = "postgres"
+  engine_version             = "10.3"
+  name                       = "chinook"
+  instance_class             = "db.m3.xlarge"
+  username                   = "hasura"
+  password                   = "unsecured"
+  port                       = "5432"
+  parameter_group_name       = "postgres10-benchmark"
+  vpc_security_group_ids     = ["${aws_security_group.graphql_bench.id}"]
+  backup_retention_period    = 0
   auto_minor_version_upgrade = false
-  multi_availability_zone = false
-  storage_encrypted = false
+  multi_az                   = false
+  storage_encrypted          = false
 }
 
 resource "aws_instance" "hasura_graphql_engine" {
-  ami = "ami-d2f489aa"
-  instance_type = "t2.micro"
-  availability_zone = "us-west-2a"
-  key_name = "aws-bench"
+  depends_on                  = ["aws_db_instance.postgres_rds"]
+  ami                         = "ami-d2f489aa"
+  instance_type               = "t2.micro"
+  availability_zone           = "us-west-2a"
+  key_name                    = "aws-bench"
+  vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
+  associate_public_ip_address = true
+  user_data                   = "${file("test.sh")}"
   tags {
     Name = "hasura_graphql_engine"
   }
-  vpc_security_group_ids = ["${aws_security_group.graphql_bench.id}"]
-  associate_public_ip_address = true
-  user_data = "${file("provision/test.sh")}"
+
+  provisioner "local-exec" {
+    command = "echo -n postgres://${aws_db_instance.postgres_rds.username}:${aws_db_instance.postgres_rds.password}@${aws_db_instance.postgres_rds.address}:${aws_db_instance.postgres_rds.port}/${aws_db_instance.postgres_rds.name} > ~/postgres_credentials"
+  }
+
+  provisioner "local-exec" {
+    command = "./graphql-server.sh start" 
+  }
 }
 
 resource "aws_instance" "hasura_benchmarker" {
-  ami = "ami-d2f489aa"
-  instance_type = "t2.micro"
-  availability_zone = "us-west-2a"
-  key_name = "aws-bench"
+  depends_on                  = ["aws_instance.hasura_graphql_engine"]
+  ami                         = "ami-d2f489aa"
+  instance_type               = "t2.micro"
+  availability_zone           = "us-west-2a"
+  key_name                    = "aws-bench"
+  vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
+  associate_public_ip_address = true
+  user_data                   = "${file("benchmarker.sh")}"
   tags {
     Name = "hasura_benchmarker"
   }
-  vpc_security_group_ids = ["${aws_security_group.graphql_bench.id}"]
-  associate_public_ip_address = true
-  user_data = "${file("provision/benchmarker.sh")}"
+
+  provisioner "local-exec" {
+    command = "echo -n postgres://${aws_db_instance.postgres_rds.username}:${aws_db_instance.postgres_rds.password}@${aws_db_instance.postgres_rds.address}:${aws_db_instance.postgres_rds.port}/${aws_db_instance.postgres_rds.name} > ~/postgres_credentials"
+  }
+
+  provisioner "local-exec" {
+    command = "sed -i.bak 's/url: \\(.*\\)$/url: https:\\/\\/\\${aws_instance.hasura_graphql_engine.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws_benchmarks/testcandidates/hasura/bench.yaml"
+  }
+
+  provisioner "local-exec" {
+    command = "sleep 100 && cat bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3"
+  }
 }
 

@@ -13,20 +13,6 @@ usage() {
 }
 
 init () {
-    # create a volume
-    docker volume create --name postgres-chinook
-
-    # initialise postgres
-    docker run --rm -v postgres-chinook:/var/lib/postgresql/data -e POSTGRES_USER=admin -e POSTGRES_DB=chinook hasuraci/postgres-init:d7cf835
-
-    # start postgres
-    docker run --name postgres-chinook -d -v postgres-chinook:/var/lib/postgresql/data -p 7432:5432 -e POSTGRES_USER=admin hasuraci/postgres-server:d7cf835
-
-    # wait for postgres to come up
-    sleep 5
-
-    # Get chinook database
-    # wget -O chinook.sql -c 'https://github.com/xivSolutions/ChinookDb_Pg_Modified/raw/pg_names/chinook_pg_serial_pk_proper_naming.sql'
 
     # copy it into the container
     docker cp "$SCRIPT_DIR/chinook.data" postgres-chinook:/chinook.data
