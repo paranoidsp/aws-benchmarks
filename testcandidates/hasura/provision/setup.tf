@@ -51,7 +51,7 @@ resource "aws_db_instance" "postgres_rds" {
 
 resource "aws_instance" "hasura_graphql_engine" {
   depends_on                  = ["aws_db_instance.postgres_rds"]
-  ami                         = "ami-ba602bc2"
+  ami                         = "ami-d491ceac"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
   key_name                    = "aws-bench"
