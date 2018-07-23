@@ -6,6 +6,8 @@ echo "Starting graphql-engine"
 
 cd ~ubuntu/aws-benchmarks/testcandidates/hasura/provision
 
+psql -d $(cat ~/postgres_credentials) -f roles.sql
+
 export DATABASE_URL=$(cat ~/postgres_credentials); docker build --build-arg "DATABASE_URL=$DATABASE_URL" . -t hasura/graphql-engine-run:latest
 
 sleep 10
