@@ -7,13 +7,13 @@ echo "Starting graphql-engine"
 cd ~ubuntu/aws-benchmarks/testcandidates/hasura/provision
 
 
-export DATABASE_URL=$(cat ~/postgres_credentials); docker build --build-arg "DATABASE_URL=$DATABASE_URL" . -t hasura/graphql-engine-run:latest
+export DATABASE_URL=$(cat ~/postgres_credentials); docker build . -t hasura/graphql-engine-run:latest
 
 sleep 10
 
 # Restore postgres
 
-pg_restore --clean --no-acl --no-owner -d "$(cat ~/postgres_credentials)" ~ubuntu/aws-benchmarks/testcandidates/hasura/provision/postgres/chinook.data
+pg_restore --clean --no-acl --no-owner -d "$(cat ~/postgres_credentials)" ~ubuntu/aws-benchmarks/testcandidates/hasura/provision/postgres/chinook.dump
 sleep 10
 
 

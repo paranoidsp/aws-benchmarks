@@ -2,12 +2,13 @@
 
 cd ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision
 
-export DATABASE_URL=$(cat ~/postgres_credentials); docker build . -t hasura/postgraphile:latest
+export DATABASE_URL=$(cat ~/postgres_credentials)
+docker build . -t hasura/postgraphile:latest
 
 sleep 10
 
 # Restore postgres
-pg_restore --clean --no-acl --no-owner -d 'postgres://postgres:unsecured@localhost:7432/chinook' ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/postgres/chinook.dump
+pg_restore --clean --no-acl --no-owner -d "$DATABASE_URL" ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/postgres/chinook.dump
 sleep 10
 
 
