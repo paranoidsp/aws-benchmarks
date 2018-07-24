@@ -11,7 +11,7 @@
   - &hasura
     name: hasura
     url: https://peaceful-crag-89514.herokuapp.com/v1alpha1/graphql
-    queries_file: hasura/queries.graphql
+    queries_file: ../queries.graphql
 
   rps: &rps_200_1000
   - 50

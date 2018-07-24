@@ -14,6 +14,13 @@ resource "aws_security_group" "graphql_bench" {
   }
 
   ingress {
+    from_port = 8050
+    to_port = 8050
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     from_port = 0
     to_port = 0
     protocol = -1
@@ -48,7 +55,7 @@ resource "aws_db_instance" "postgraphile_postgres_rds" {
   storage_encrypted          = false
 }
 
-resource "aws_instance" "postgraphile_graphql_engine" {
+resource "aws_instance" "postgraphile" {
   depends_on                  = ["aws_db_instance.postgraphile_postgres_rds"]
   ami                         = "ami-d491ceac"
   instance_type               = "t2.micro"
@@ -57,7 +64,7 @@ resource "aws_instance" "postgraphile_graphql_engine" {
   vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
   associate_public_ip_address = true
   tags {
-    Name = "postgraphile_graphql_engine"
+    Name = "postgraphile"
   }
   user_data                   = "${file("base.sh")}"
 
@@ -66,6 +73,8 @@ resource "aws_instance" "postgraphile_graphql_engine" {
       "echo -n postgres://${aws_db_instance.postgraphile_postgres_rds.username}:${aws_db_instance.postgraphile_postgres_rds.password}@${aws_db_instance.postgraphile_postgres_rds.address}:${aws_db_instance.postgraphile_postgres_rds.port}/${aws_db_instance.postgraphile_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh",
+			"sudo chmod +x ~ubuntu/aws-benchmarks/scripts/get_ram.sh",
+			"./get_ram.sh 7200 > ~/aws-benchmarks/results/hasura.ram &",
       "~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh"
     ]
     connection {
@@ -75,3 +84,30 @@ resource "aws_instance" "postgraphile_graphql_engine" {
   }
 }
 
+resource "aws_instance" "postgraphile_benchmarker" {
+  depends_on                  = ["aws_instance.postgraphile"]
+  ami                         = "ami-d491ceac"
+  instance_type               = "t2.micro"
+  availability_zone           = "us-west-2a"
+  key_name                    = "aws-bench"
+  vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
+  associate_public_ip_address = true
+  user_data                   = "${file("base.sh")}"
+  tags {
+    Name = "postgraphile_benchmarker"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo -n postgres://${aws_db_instance.postgraphile_postgres_rds.username}:${aws_db_instance.postgraphile_postgres_rds.password}@${aws_db_instance.postgraphile_postgres_rds.address}:${aws_db_instance.postgraphile_postgres_rds.port}/${aws_db_instance.postgraphile_postgres_rds.name} > ~/postgres_credentials",
+			"sleep 100",
+      "sed -i.bak 's/url: \\(.*\\)$/url: https:\\/\\/\\${aws_instance.postgraphile.public_dns}:8080\\/graphql/' ~/aws_benchmarks/testcandidates/postgraphile/provision/bench.yaml",
+      "sleep 100 && cat bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws postgraphile/graphql-bench:v0.3-warmup"
+    ]
+
+    connection {
+      user = "ec2-user"
+      private_key = "${file("~/.ssh/aws-bench.pem")}"
+    }
+  }
+}

@@ -72,8 +72,8 @@ query artists_collaboration {
 }
 
 query artistByArtistId {
-  artists(where: {id: 3}) {
-    id
-    name
+  Artists(where: {ArtistId: {_eq: 3}} ) {
+    ArtistId
+    Name
   }
 }
