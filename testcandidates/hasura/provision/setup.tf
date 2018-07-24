@@ -38,7 +38,7 @@ resource "aws_db_instance" "postgres_rds" {
   engine_version             = "10.3"
   name                       = "chinook"
   instance_class             = "db.m3.xlarge"
-  username                   = "hasura"
+  username                   = "postgres"
   password                   = "unsecured"
   port                       = "5432"
   parameter_group_name       = "postgres10-benchmark"

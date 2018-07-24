@@ -13,15 +13,9 @@ sleep 10
 
 # Restore postgres
 
-echo "Adding roles"
-psql -d $(cat ~/postgres_credentials) -f roles.sql
-
 echo "Restoring data"
-pg_restore -d $DATABASE_URL postgres/chinook.data
-
+pg_restore --clean --no-acl --no-owner -d 'postgres://postgres:unsecured@localhost:7432/chinook' postgres/chinook.dump
 sleep 10
 
-cat "$SCRIPT_DIR/metadata.json" | curl -d @- -XPOST -H 'X-Hasura-User-Id:0' -H 'X-Hasura-Role:admin' $RAVEN_URL/v1/query
-
-docker run -p 8080:8080 -e "DATABASE_URL=$DATABASE_URL" -d hasura/graphql-engine-run:latest
+docker run --name graphql-engine -p 8080:8080  -d hasura/graphql-engine-run:latest --database-url "$(cat ~/postgres_credentials)" serve --cors-domain "https://localhost:9695" --server-port 8080 --enable-console 
 touch ~/started_docker

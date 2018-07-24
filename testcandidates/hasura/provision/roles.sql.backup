@@ -1,8 +1,0 @@
-
--- Create postgres and admin roles
-
-create user postgres with password "";
-grant rds_superuser to postgres;
-
-create user admin with password "";
-grant rds_superuser to admin;
