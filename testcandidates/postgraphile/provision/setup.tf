@@ -102,7 +102,7 @@ resource "aws_instance" "postgraphile_benchmarker" {
       "echo -n postgres://${aws_db_instance.postgraphile_postgres_rds.username}:${aws_db_instance.postgraphile_postgres_rds.password}@${aws_db_instance.postgraphile_postgres_rds.address}:${aws_db_instance.postgraphile_postgres_rds.port}/${aws_db_instance.postgraphile_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/url: \\(.*\\)$/url: https:\\/\\/\\${aws_instance.postgraphile.public_dns}:8080\\/graphql/' ~/aws-benchmarks/testcandidates/postgraphile/provision/bench.yaml",
+      "sed -i.bak 's/url: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.postgraphile.public_dns}:8080\\/graphql/' ~/aws-benchmarks/testcandidates/postgraphile/provision/bench.yaml",
       "sleep 100 && cat ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
     ]
 
