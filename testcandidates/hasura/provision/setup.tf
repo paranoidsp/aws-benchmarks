@@ -58,7 +58,7 @@ resource "aws_db_instance" "postgres_rds" {
 
 resource "aws_instance" "hasura_graphql_engine" {
   depends_on                  = ["aws_db_instance.postgres_rds"]
-  ami                         = "ami-d491ceac"
+  ami                         = "ami-84633afc"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
   key_name                    = "aws-bench"
@@ -87,7 +87,7 @@ resource "aws_instance" "hasura_graphql_engine" {
 
 resource "aws_instance" "hasura_benchmarker" {
   depends_on                  = ["aws_instance.hasura_graphql_engine"]
-  ami                         = "ami-d491ceac"
+  ami                         = "ami-84633afc"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
   key_name                    = "aws-bench"
@@ -102,8 +102,9 @@ resource "aws_instance" "hasura_benchmarker" {
     inline = [
       "echo -n postgres://${aws_db_instance.postgres_rds.username}:${aws_db_instance.postgres_rds.password}@${aws_db_instance.postgres_rds.address}:${aws_db_instance.postgres_rds.port}/${aws_db_instance.postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
-      "sed -i.bak 's/url: \\(.*\\)$/url: https:\\/\\/\\${aws_instance.hasura_graphql_engine.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws_benchmarks/testcandidates/hasura/provision/bench.yaml",
-      "sleep 100 && cat bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
+			"sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
+      "sed -i.bak 's/url: \\(.*\\)$/url: https:\\/\\/\\${aws_instance.hasura_graphql_engine.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws-benchmarks/testcandidates/hasura/provision/bench.yaml",
+      "sleep 100 && cat ~ubuntu/aws-benchmarks/hasura/provision/bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
     ]
 
     connection {

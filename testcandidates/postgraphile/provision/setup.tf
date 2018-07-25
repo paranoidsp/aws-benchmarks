@@ -57,7 +57,7 @@ resource "aws_db_instance" "postgraphile_postgres_rds" {
 
 resource "aws_instance" "postgraphile" {
   depends_on                  = ["aws_db_instance.postgraphile_postgres_rds"]
-  ami                         = "ami-d491ceac"
+  ami                         = "ami-84633afc"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
   key_name                    = "aws-bench"
@@ -86,7 +86,7 @@ resource "aws_instance" "postgraphile" {
 
 resource "aws_instance" "postgraphile_benchmarker" {
   depends_on                  = ["aws_instance.postgraphile"]
-  ami                         = "ami-d491ceac"
+  ami                         = "ami-84633afc"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
   key_name                    = "aws-bench"
@@ -101,8 +101,9 @@ resource "aws_instance" "postgraphile_benchmarker" {
     inline = [
       "echo -n postgres://${aws_db_instance.postgraphile_postgres_rds.username}:${aws_db_instance.postgraphile_postgres_rds.password}@${aws_db_instance.postgraphile_postgres_rds.address}:${aws_db_instance.postgraphile_postgres_rds.port}/${aws_db_instance.postgraphile_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
-      "sed -i.bak 's/url: \\(.*\\)$/url: https:\\/\\/\\${aws_instance.postgraphile.public_dns}:8080\\/graphql/' ~/aws_benchmarks/testcandidates/postgraphile/provision/bench.yaml",
-      "sleep 100 && cat bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws postgraphile/graphql-bench:v0.3-warmup"
+      "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
+      "sed -i.bak 's/url: \\(.*\\)$/url: https:\\/\\/\\${aws_instance.postgraphile.public_dns}:8080\\/graphql/' ~/aws-benchmarks/testcandidates/postgraphile/provision/bench.yaml",
+      "sleep 100 && cat ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
     ]
 
     connection {

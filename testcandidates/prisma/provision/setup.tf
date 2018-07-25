@@ -36,7 +36,7 @@ resource "aws_db_instance" "prisma_postgres_rds" {
   engine_version             = "10.3"
   name                       = "chinook"
   instance_class             = "db.m3.xlarge"
-  username                   = "admin"
+  username                   = "postgres"
   password                   = "unsecured"
   port                       = "5432"
   parameter_group_name       = "postgres10-benchmark"
@@ -49,7 +49,7 @@ resource "aws_db_instance" "prisma_postgres_rds" {
 
 resource "aws_instance" "prisma_graphql_engine" {
   depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
-  ami                         = "ami-d491ceac"
+  ami                         = "ami-84633afc"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
   key_name                    = "aws-bench"

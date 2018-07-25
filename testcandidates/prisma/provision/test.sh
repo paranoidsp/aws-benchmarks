@@ -8,7 +8,7 @@ sleep 10
 
 PRISMA=~/prisma/node_modules/prisma/dist/index.js
 
-docker-compose -f docker-compose-pg.yaml up -d
+docker-compose -f docker-compose-pg.yml up -d
 sleep 30
 
 "$PRISMA" deploy
