@@ -103,7 +103,7 @@ resource "aws_instance" "postgraphile_benchmarker" {
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
       "sed -i.bak 's/url: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.postgraphile.public_dns}:8080\\/graphql/' ~/aws-benchmarks/testcandidates/postgraphile/provision/bench.yaml",
-      "sleep 100 && cat ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
+      "cd ~ubuntu/aws-benchmarks/testcandidates/postgraphile && cat provision/bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
     ]
 
     connection {
