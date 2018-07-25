@@ -104,7 +104,7 @@ resource "aws_instance" "hasura_benchmarker" {
 			"sleep 100",
 			"sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
       "sed -i.bak 's/url: \\(.*\\)$/url: https:\\/\\/\\${aws_instance.hasura_graphql_engine.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws-benchmarks/testcandidates/hasura/provision/bench.yaml",
-      "sleep 100 && cat ~ubuntu/aws-benchmarks/hasura/provision/bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
+      "sleep 100 && cat ~ubuntu/aws-benchmarks/testcandidates/hasura/provision/bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
     ]
 
     connection {

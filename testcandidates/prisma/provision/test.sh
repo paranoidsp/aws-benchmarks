@@ -12,4 +12,4 @@ docker-compose -f docker-compose-pg.yml up -d
 sleep 30
 
 "$PRISMA" deploy
-"$PRISMA" import --data postgres/latest.dump
+"$PRISMA" import --data postgres/chinook.zip
