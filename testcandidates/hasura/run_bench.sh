@@ -15,4 +15,5 @@ terraform apply --auto-approve
 
 benchmarker=$(getMachineDNS "hasura_benchmarker")
 
+set -x
 ssh -i ~/.ssh/aws-bench.pem ubuntu@$benchmarker "cd ~ubuntu/aws-benchmarks/testcandidates/hasura && cat ../bench.yaml | docker run --name benchmarker -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"

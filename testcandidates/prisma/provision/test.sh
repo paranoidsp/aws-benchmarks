@@ -13,6 +13,3 @@ PRISMA=~/prisma/node_modules/prisma/dist/index.js
 nohup ~ubuntu/aws-benchmarks/get_ram.sh 10800 > ~ubuntu/prisma.ram &
 
 docker-compose -f docker-compose-pg.yml up -d
-sleep 30
-
-"$PRISMA" deploy
