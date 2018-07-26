@@ -1,11 +1,11 @@
 query albums_tracks_genre_all {
   allAlbums {
     nodes {
-      id
+      albumId
       title
       tracksByAlbumId {
         nodes {
-          id
+          trackId
           name
           genreByGenreId {
             name
@@ -19,11 +19,11 @@ query albums_tracks_genre_all {
 query albums_tracks_genre_some {
   allAlbums(condition: {artistId: 127}) {
     nodes {
-      id
+      artistId
       title
       tracksByAlbumId {
         nodes {
-          id
+          trackId
           name
           genreByGenreId {
             name
@@ -37,7 +37,7 @@ query albums_tracks_genre_some {
 query tracks_media_all {
   allTracks {
     nodes {
-      id
+      trackId
       name
       mediaTypeByMediaTypeId {
         name
@@ -49,7 +49,7 @@ query tracks_media_all {
 query tracks_media_some {
   allTracks(condition: {composer: "Kurt Cobain"}) {
     nodes {
-      id
+      trackId
       name
       mediaTypeByMediaTypeId {
         name
@@ -58,10 +58,9 @@ query tracks_media_some {
   }
 }
 
-query artistByArtistId {
-  allArtists(condition: {id: 3}) {
+query artistByArtistId { allArtists(condition: {id: 3}) {
     nodes {
-      id
+      artistId
       name
     }
   }

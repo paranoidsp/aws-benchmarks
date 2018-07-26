@@ -103,9 +103,10 @@ resource "aws_instance" "hasura_benchmarker" {
       "echo -n postgres://${aws_db_instance.postgres_rds.username}:${aws_db_instance.postgres_rds.password}@${aws_db_instance.postgres_rds.address}:${aws_db_instance.postgres_rds.port}/${aws_db_instance.postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
 			"sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/url: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.hasura_graphql_engine.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws-benchmarks/testcandidates/hasura/provision/bench.yaml",
-      "cd ~ubuntu/aws-benchmarks/testcandidates/hasura && cat provision/bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
+      "sed -i.bak 's/url: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.hasura_graphql_engine.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws-benchmarks/testcandidates/hasura/provision/bench.yaml"
     ]
+
+# "cd ~ubuntu/aws-benchmarks/testcandidates/hasura && cat provision/bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
 
     connection {
       user = "ubuntu"
