@@ -66,7 +66,7 @@ resource "aws_instance" "t2-micro-1" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+      "sed -i.bak 's/host: .*$/host: \${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
       "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 1"
     ]
@@ -96,7 +96,7 @@ resource "aws_instance" "t2-medium-2" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+      "sed -i.bak 's/host: .*$/host: \${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
       "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 2"
     ]
@@ -126,7 +126,7 @@ resource "aws_instance" "m5-xlarge-4" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+      "sed -i.bak 's/host: .*$/host: \${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
       "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 4"
     ]
@@ -156,7 +156,7 @@ resource "aws_instance" "m5-2xlarge-8" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+      "sed -i.bak 's/host: .*$/host: \${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
       "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 8"
     ]
@@ -188,10 +188,10 @@ resource "aws_instance" "prisma_benchmarker" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/url1: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.t2-micro-1.public_dns}:4466' ~/aws-benchmarks/testcandidates/bench.yaml",
-      "sed -i.bak 's/url2: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.t2-medium-2.public_dns}:4466' ~/aws-benchmarks/testcandidates/bench.yaml",
-      "sed -i.bak 's/url3: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-xlarge-4.public_dns}:4466' ~/aws-benchmarks/testcandidates/bench.yaml",
-      "sed -i.bak 's/url4: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-2xlarge-8.public_dns}:4466' ~/aws-benchmarks/testcandidates/bench.yaml",
+      "sed -i.bak 's/url1: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.t2-micro-1.public_dns}:4466/' ~/aws-benchmarks/testcandidates/bench.yaml",
+      "sed -i.bak 's/url2: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.t2-medium-2.public_dns}:4466/' ~/aws-benchmarks/testcandidates/bench.yaml",
+      "sed -i.bak 's/url3: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-xlarge-4.public_dns}:4466/' ~/aws-benchmarks/testcandidates/bench.yaml",
+      "sed -i.bak 's/url4: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-2xlarge-8.public_dns}:4466/' ~/aws-benchmarks/testcandidates/bench.yaml",
     ]
 
     connection {
