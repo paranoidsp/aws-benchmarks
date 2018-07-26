@@ -79,8 +79,7 @@ resource "aws_instance" "m5-2xlarge-8" {
   }
 }
 resource "aws_instance" "t2-micro-1" {
-  depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
-  depends_on                  = ["aws_db_instance.m5-2xlarge-8"]
+  depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
@@ -110,8 +109,7 @@ resource "aws_instance" "t2-micro-1" {
 }
 
 resource "aws_instance" "t2-medium-2" {
-  depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
-  depends_on                  = ["aws_db_instance.m5-2xlarge-8"]
+  depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "t2.medium"
   availability_zone           = "us-west-2a"
@@ -141,8 +139,7 @@ resource "aws_instance" "t2-medium-2" {
 }
 
 resource "aws_instance" "m5-xlarge-4" {
-  depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
-  depends_on                  = ["aws_db_instance.m5-2xlarge-8"]
+  depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "m5.xlarge"
   availability_zone           = "us-west-2a"
