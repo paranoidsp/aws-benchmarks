@@ -50,6 +50,15 @@
 - <<: *default_bench
   name: Nested 20
   query: albums_tracks_genre_all
+  rps:
+    - 5
+    - 10
+    - 20
+    - 30
+    - 40
+    - 50
+    - 75
+    - 100
 
 - <<: *default_bench
   name: Nested with where 20
