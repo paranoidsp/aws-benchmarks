@@ -64,6 +64,7 @@ resource "aws_instance" "prisma" {
     inline = [
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
       "echo -n ${aws_db_instance.prisma_postgres_rds.address} ${aws_db_instance.prisma_postgres_rds.username} ${aws_db_instance.prisma_postgres_rds.password} > ~/postgres",
+      "sed -i.bak 's/host: \\(.*\\)$/host: \\${aws_db_instance.prisma_postgres_rds.address}' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
