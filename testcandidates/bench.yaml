@@ -8,10 +8,26 @@
 
   candidates: &candidates
 
-  - &main
-    name: main
-    url: http://ec2-52-39-1-150.us-west-2.compute.amazonaws.com:8080/v1alpha1/graphql
+  - &1cpu
+    name: 1cpu
+    url1: http://ec2-52-39-1-150.us-west-2.compute.amazonaws.com:8080/v1alpha1/graphql
     queries_file: queries.graphql
+
+  - &2cpu
+    name: 2cpu
+    url2: http://ec2-52-39-1-150.us-west-2.compute.amazonaws.com:8080/v1alpha1/graphql
+    queries_file: queries.graphql
+
+  - &4cpu
+    name: 4cpu
+    url3: http://ec2-52-39-1-150.us-west-2.compute.amazonaws.com:8080/v1alpha1/graphql
+    queries_file: queries.graphql
+
+  - &8cpu
+    name: 8cpu
+    url4: http://ec2-52-39-1-150.us-west-2.compute.amazonaws.com:8080/v1alpha1/graphql
+    queries_file: queries.graphql
+
 
   rps: &rps_50_5000
   - 50
@@ -39,17 +55,17 @@
   name: Nested with where 20
   query: albums_tracks_genre_some
 
-- <<: *default_bench
-  name: Simple Select 40
-  query: artistByArtistId
-  open_connections: 40
-
-- <<: *default_bench
-  name: Nested 20
-  query: albums_tracks_genre_all
-  open_connections: 40
-
-- <<: *default_bench
-  name: Nested with where 40
-  query: albums_tracks_genre_some
-  open_connections: 40
+# - <<: *default_bench
+  # name: Simple Select 40
+  # query: artistByArtistId
+  # open_connections: 40
+#
+# - <<: *default_bench
+  # name: Nested 40
+  # query: albums_tracks_genre_all
+  # open_connections: 40
+#
+# - <<: *default_bench
+  # name: Nested with where 40
+  # query: albums_tracks_genre_some
+  # open_connections: 40
