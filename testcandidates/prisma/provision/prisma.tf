@@ -64,9 +64,9 @@ resource "aws_instance" "prisma" {
     inline = [
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
       "echo -n ${aws_db_instance.prisma_postgres_rds.address} ${aws_db_instance.prisma_postgres_rds.username} ${aws_db_instance.prisma_postgres_rds.password} > ~/postgres",
-      "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
+      "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
       "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh"
     ]
@@ -95,7 +95,7 @@ resource "aws_instance" "prisma_benchmarker" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/url: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.prisma.public_dns}:4466\\//' ~/aws-benchmarks/testcandidates/bench.yaml",
+      "sed -i.bak 's/url1: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.prisma.public_dns}:4466\\//' ~/aws-benchmarks/testcandidates/bench.yaml",
       "cd ~ubuntu/aws-benchmarks/testcandidates/prisma && cat ../bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
     ]
 
