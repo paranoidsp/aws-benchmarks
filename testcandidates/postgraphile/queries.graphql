@@ -58,10 +58,8 @@ query tracks_media_some {
   }
 }
 
-query artistByArtistId { allArtists(condition: {id: 3}) {
-    nodes {
-      artistId
-      name
-    }
+query artistByArtistId { artistByArtistId(artistId: 3) {
+    artistId
+    name
   }
 }

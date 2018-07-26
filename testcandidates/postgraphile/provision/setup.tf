@@ -14,8 +14,8 @@ resource "aws_security_group" "graphql_bench" {
   }
 
   ingress {
-    from_port = 8050
-    to_port = 8050
+    from_port = 8080
+    to_port = 8080
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

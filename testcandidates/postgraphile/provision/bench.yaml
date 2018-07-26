@@ -1,6 +1,6 @@
 - &default_bench
-  name: genre_all
-  query: genre_all
+  name: artistByArtistId
+  query: artistByArtistId
   timeout: 1s
   warmup_duration: 60
   duration: 100
