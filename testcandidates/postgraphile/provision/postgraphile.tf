@@ -66,8 +66,8 @@ resource "aws_instance" "t2-micro-1" {
     inline = [
       "echo -n postgres://${aws_db_instance.postgraphile_postgres_rds.username}:${aws_db_instance.postgraphile_postgres_rds.password}@${aws_db_instance.postgraphile_postgres_rds.address}:${aws_db_instance.postgraphile_postgres_rds.port}/${aws_db_instance.postgraphile_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
+      "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh",
-			"sudo chmod +x ~ubuntu/aws-benchmarks/scripts/get_ram.sh",
       "~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh 1"
     ]
     connection {
@@ -95,8 +95,8 @@ resource "aws_instance" "t2-medium-2" {
     inline = [
       "echo -n postgres://${aws_db_instance.postgraphile_postgres_rds.username}:${aws_db_instance.postgraphile_postgres_rds.password}@${aws_db_instance.postgraphile_postgres_rds.address}:${aws_db_instance.postgraphile_postgres_rds.port}/${aws_db_instance.postgraphile_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
+      "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh",
-			"sudo chmod +x ~ubuntu/aws-benchmarks/scripts/get_ram.sh",
       "~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh 2"
     ]
     connection {
@@ -124,8 +124,8 @@ resource "aws_instance" "m5-xlarge-4" {
     inline = [
       "echo -n postgres://${aws_db_instance.postgraphile_postgres_rds.username}:${aws_db_instance.postgraphile_postgres_rds.password}@${aws_db_instance.postgraphile_postgres_rds.address}:${aws_db_instance.postgraphile_postgres_rds.port}/${aws_db_instance.postgraphile_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
+      "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh",
-			"sudo chmod +x ~ubuntu/aws-benchmarks/scripts/get_ram.sh",
       "~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh 4"
     ]
     connection {
@@ -153,8 +153,8 @@ resource "aws_instance" "m5-2xlarge-8" {
     inline = [
       "echo -n postgres://${aws_db_instance.postgraphile_postgres_rds.username}:${aws_db_instance.postgraphile_postgres_rds.password}@${aws_db_instance.postgraphile_postgres_rds.address}:${aws_db_instance.postgraphile_postgres_rds.port}/${aws_db_instance.postgraphile_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
+      "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh",
-			"sudo chmod +x ~ubuntu/aws-benchmarks/scripts/get_ram.sh",
       "~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh 8"
     ]
     connection {

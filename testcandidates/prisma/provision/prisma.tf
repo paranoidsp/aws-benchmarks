@@ -47,7 +47,7 @@ resource "aws_db_instance" "prisma_postgres_rds" {
   storage_encrypted          = false
 }
 
-resource "aws_instance" "prisma" {
+resource "aws_instance" "t2-micro-1" {
   depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
   ami                         = "ami-84633afc"
   instance_type               = "t2.micro"
@@ -56,19 +56,109 @@ resource "aws_instance" "prisma" {
   vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
   associate_public_ip_address = true
   tags {
-    Name = "prisma"
+    Name = "prisma-t2-micro-1",
+		CPU  = "1"
   }
   user_data                   = "${file("base.sh")}"
 
   provisioner "remote-exec" {
     inline = [
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
-      "echo -n ${aws_db_instance.prisma_postgres_rds.address} ${aws_db_instance.prisma_postgres_rds.username} ${aws_db_instance.prisma_postgres_rds.password} > ~/postgres",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
       "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
-      "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh"
+      "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 1"
+    ]
+    connection {
+      user = "ubuntu"
+      private_key = "${file("~/.ssh/aws-bench.pem")}"
+    }
+  }
+}
+
+resource "aws_instance" "t2-medium-2" {
+  depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
+  ami                         = "ami-84633afc"
+  instance_type               = "t2.medium"
+  availability_zone           = "us-west-2a"
+  key_name                    = "aws-bench"
+  vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
+  associate_public_ip_address = true
+  tags {
+    Name = "prisma-t2-medium-2",
+		CPU  = "2"
+  }
+  user_data                   = "${file("base.sh")}"
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
+			"sleep 100",
+      "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
+      "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
+      "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 2"
+    ]
+    connection {
+      user = "ubuntu"
+      private_key = "${file("~/.ssh/aws-bench.pem")}"
+    }
+  }
+}
+
+resource "aws_instance" "m5-xlarge-4" {
+  depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
+  ami                         = "ami-84633afc"
+  instance_type               = "m5.xlarge"
+  availability_zone           = "us-west-2a"
+  key_name                    = "aws-bench"
+  vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
+  associate_public_ip_address = true
+  tags {
+    Name = "prisma-m5-xlarge-4",
+		CPU  = "4"
+  }
+  user_data                   = "${file("base.sh")}"
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
+			"sleep 100",
+      "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
+      "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
+      "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 4"
+    ]
+    connection {
+      user = "ubuntu"
+      private_key = "${file("~/.ssh/aws-bench.pem")}"
+    }
+  }
+}
+
+resource "aws_instance" "m5-2xlarge-8" {
+  depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
+  ami                         = "ami-84633afc"
+  instance_type               = "m5.2xlarge"
+  availability_zone           = "us-west-2a"
+  key_name                    = "aws-bench"
+  vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
+  associate_public_ip_address = true
+  tags {
+    Name = "prisma-m5-2xlarge-8",
+		CPU  = "8"
+  }
+  user_data                   = "${file("base.sh")}"
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
+			"sleep 100",
+      "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
+      "sed -i.bak 's/host: .*$/host: \\${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
+      "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 8"
     ]
     connection {
       user = "ubuntu"
@@ -78,9 +168,12 @@ resource "aws_instance" "prisma" {
 }
 
 resource "aws_instance" "prisma_benchmarker" {
-  depends_on                  = ["aws_instance.prisma"]
+  depends_on                  = ["aws_instance.t2-micro-1"]
+  depends_on                  = ["aws_instance.t2-medium-2"]
+  depends_on                  = ["aws_instance.m5-xlarge-4"]
+  depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
-  instance_type               = "t2.micro"
+  instance_type               = "m5.xlarge"
   availability_zone           = "us-west-2a"
   key_name                    = "aws-bench"
   vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
@@ -95,8 +188,10 @@ resource "aws_instance" "prisma_benchmarker" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/url1: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.prisma.public_dns}:4466\\//' ~/aws-benchmarks/testcandidates/bench.yaml",
-      "cd ~ubuntu/aws-benchmarks/testcandidates/prisma && cat ../bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
+      "sed -i.bak 's/url1: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.t2-micro-1.public_dns}:4466' ~/aws-benchmarks/testcandidates/bench.yaml",
+      "sed -i.bak 's/url2: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.t2-medium-2.public_dns}:4466' ~/aws-benchmarks/testcandidates/bench.yaml",
+      "sed -i.bak 's/url3: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-xlarge-4.public_dns}:4466' ~/aws-benchmarks/testcandidates/bench.yaml",
+      "sed -i.bak 's/url4: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-2xlarge-8.public_dns}:4466' ~/aws-benchmarks/testcandidates/bench.yaml",
     ]
 
     connection {
