@@ -49,6 +49,7 @@ resource "aws_db_instance" "prisma_postgres_rds" {
 
 resource "aws_instance" "t2-micro-1" {
   depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
+  depends_on                  = ["aws_db_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
@@ -66,7 +67,7 @@ resource "aws_instance" "t2-micro-1" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/host: .*$/host: \${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+      "sed -i.bak 's/host: .*$/host: ${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
       "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 1"
     ]
@@ -79,6 +80,7 @@ resource "aws_instance" "t2-micro-1" {
 
 resource "aws_instance" "t2-medium-2" {
   depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
+  depends_on                  = ["aws_db_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "t2.medium"
   availability_zone           = "us-west-2a"
@@ -96,7 +98,7 @@ resource "aws_instance" "t2-medium-2" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/host: .*$/host: \${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+      "sed -i.bak 's/host: .*$/host: ${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
       "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 2"
     ]
@@ -109,6 +111,7 @@ resource "aws_instance" "t2-medium-2" {
 
 resource "aws_instance" "m5-xlarge-4" {
   depends_on                  = ["aws_db_instance.prisma_postgres_rds"]
+  depends_on                  = ["aws_db_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "m5.xlarge"
   availability_zone           = "us-west-2a"
@@ -126,7 +129,7 @@ resource "aws_instance" "m5-xlarge-4" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/host: .*$/host: \${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+      "sed -i.bak 's/host: .*$/host: ${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
       "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 4"
     ]
@@ -156,9 +159,11 @@ resource "aws_instance" "m5-2xlarge-8" {
       "echo -n postgres://${aws_db_instance.prisma_postgres_rds.username}:${aws_db_instance.prisma_postgres_rds.password}@${aws_db_instance.prisma_postgres_rds.address}:${aws_db_instance.prisma_postgres_rds.port}/${aws_db_instance.prisma_postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-      "sed -i.bak 's/host: .*$/host: \${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
+      "sed -i.bak 's/host: .*$/host: ${aws_db_instance.prisma_postgres_rds.address}/' ~/aws-benchmarks/testcandidates/prisma/provision/docker-compose-pg.yml",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh",
-      "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 8"
+			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/prisma/provision/import.sh",
+      "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/test.sh 8",
+      "~ubuntu/aws-benchmarks/testcandidates/prisma/provision/import.sh"
     ]
     connection {
       user = "ubuntu"
