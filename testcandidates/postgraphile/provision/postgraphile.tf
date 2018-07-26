@@ -68,7 +68,7 @@ resource "aws_instance" "t2-micro-1" {
 			"sleep 100",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/scripts/get_ram.sh",
-			"./get_ram.sh 10800 > ~/aws-benchmarks/testcandidates/postgraphile/results/hasura.ram &",
+			"./get_ram.sh 10800 > ~/aws-benchmarks/testcandidates/postgraphile/postgraphile.ram &",
       "~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh 1"
     ]
     connection {
@@ -98,7 +98,7 @@ resource "aws_instance" "t2-medium-2" {
 			"sleep 100",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/scripts/get_ram.sh",
-			"./get_ram.sh 10800 > ~/aws-benchmarks/testcandidates/postgraphile/results/postgraphile.ram &",
+			"./get_ram.sh 10800 > ~/aws-benchmarks/testcandidates/postgraphile/postgraphile.ram &",
       "~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh 2"
     ]
     connection {
@@ -128,7 +128,7 @@ resource "aws_instance" "m5-xlarge-4" {
 			"sleep 100",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/scripts/get_ram.sh",
-			"./get_ram.sh 10800 > ~/aws-benchmarks/testcandidates/postgraphile/results/postgraphile.ram &",
+			"./get_ram.sh 10800 > ~/aws-benchmarks/testcandidates/postgraphile/postgraphile.ram &",
       "~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh 4"
     ]
     connection {
@@ -158,7 +158,7 @@ resource "aws_instance" "m5-2xlarge-8" {
 			"sleep 100",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh",
 			"sudo chmod +x ~ubuntu/aws-benchmarks/scripts/get_ram.sh",
-			"./get_ram.sh 10800 > ~/aws-benchmarks/testcandidates/postgraphile/results/postgraphile.ram &",
+			"./get_ram.sh 10800 > ~/aws-benchmarks/testcandidates/postgraphile/postgraphile.ram &",
       "~ubuntu/aws-benchmarks/testcandidates/postgraphile/provision/test.sh 8"
     ]
     connection {
@@ -193,7 +193,8 @@ resource "aws_instance" "postgraphile_benchmarker" {
       "sed -i.bak 's/url2: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.t2-medium-2.public_dns}:8080\\/graphql/' ~/aws-benchmarks/testcandidates/bench.yaml",
       "sed -i.bak 's/url3: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-xlarge-4.public_dns}:8080\\/graphql/' ~/aws-benchmarks/testcandidates/bench.yaml",
       "sed -i.bak 's/url4: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-2xlarge-8.public_dns}:8080\\/graphql/' ~/aws-benchmarks/testcandidates/bench.yaml",
-      "cd ~ubuntu/aws-benchmarks/testcandidates/postgraphile && cat ../bench.yaml | docker run -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup &"
+      "sudo chmod +x ~ubuntu/testcandidates/postgraphile/provision/bench.sh",
+      "~ubuntu/testcandidates/postgraphile/provision/bench.sh &"
     ]
 
     connection {
