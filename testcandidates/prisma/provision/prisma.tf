@@ -6,6 +6,12 @@ resource "aws_security_group" "graphql_bench" {
   }
   
   ingress {
+    from_port = 60000
+    to_port = 61000
+    protocol = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
     from_port = 22
     to_port = 22
     protocol = "tcp"
@@ -109,7 +115,7 @@ resource "aws_instance" "t2-micro-1" {
 }
 
 resource "aws_instance" "t2-medium-2" {
-  depends_on                  = ["aws_instance.t2-micro-1"]
+  depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "t2.medium"
   availability_zone           = "us-west-2a"
@@ -139,7 +145,7 @@ resource "aws_instance" "t2-medium-2" {
 }
 
 resource "aws_instance" "m5-xlarge-4" {
-  depends_on                  = ["aws_instance.t2-medium-2"]
+  depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "m5.xlarge"
   availability_zone           = "us-west-2a"
