@@ -1,1 +1,1 @@
-FROM hasura/graphql-engine:v1.0.0-alpha08
+FROM hasura/graphql-engine:dev-rtsopts-n-e924d3e

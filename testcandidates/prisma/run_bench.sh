@@ -6,12 +6,17 @@ getMachineDNS () {
 
 cd provision
 terraform init
+
+echo "======================="
+echo "Finished Initialization"
 if [[ $1 == "destroy" ]]
 then
   terraform destroy --auto-approve
 fi
+echo "Applying config"
 terraform apply --auto-approve
+echo "Finished applying "
 
 benchmarker=$(getMachineDNS "prisma_benchmarker")
 
-ssh -i ~/.ssh/aws-bench.pem ubuntu@$benchmarker "cd ~ubuntu/aws-benchmarks/testcandidates/hasura && cat ../bench.yaml | docker run --name benchmarker -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.3-warmup"
+ssh -i ~/.ssh/aws-bench.pem ubuntu@$benchmarker "cd ~ubuntu/aws-benchmarks/testcandidates/prisma && cat ../bench.yaml | docker run --name benchmarker -i --rm -p 8050:8050 -v $(pwd):/graphql-bench/ws hasura/graphql-bench:v0.4-variable &"

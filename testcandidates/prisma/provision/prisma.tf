@@ -17,6 +17,12 @@ resource "aws_security_group" "graphql_bench" {
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    from_port = 60000
+    to_port = 61000
+    protocol = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   ingress {
     from_port = 0

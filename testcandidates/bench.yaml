@@ -4,7 +4,7 @@
   timeout: 1s
   warmup_duration: 100
   duration: 60
-  open_connections: 20
+  open_connections: 60
 
   candidates: &candidates
 
@@ -23,59 +23,30 @@
     url3: http://ec2-52-39-1-150.us-west-2.compute.amazonaws.com:8080/v1alpha1/graphql
     queries_file: queries.graphql
 
-  - &8cpu
-    name: 8cpu
+  - &16cpu
+    name: 16cpu
     url4: http://ec2-52-39-1-150.us-west-2.compute.amazonaws.com:8080/v1alpha1/graphql
     queries_file: queries.graphql
   
   rps:
     500
+    1000
+    2000
+    4000
+    6000
+    8000
+    10000
 
-# - <<: *default_bench
-  # name: Nested 20
-  # query: albums_tracks_genre_all
-  # rps:
-    # - 5
-    # - 10
-    # - 20
-    # - 30
-    # - 40
-    # - 50
-    # - 75
-    # - 100
-#
-# - <<: *default_bench
-  # name: Nested with where 20
-  # query: albums_tracks_genre_some
-
-# - <<: *default_bench
-  # name: Simple Select 40
-  # query: artistByArtistId
-  # open_connections: 40
-  # rps: &rps_50_5000
-  # - 50
-  # - 100
-  # - 200
-  # - 400
-  # - 600
-  # - 800
-  # - 1000
-  # - 1250
-  # - 1500
-  # - 1750
-  # - 2000
-  # - 2500
-  # - 3000
-  # - 3500
-  # - 4000
-  # - 5000
-#
-# - <<: *default_bench
-  # name: Nested 40
-  # query: albums_tracks_genre_all
-  # open_connections: 40
-#
-# - <<: *default_bench
-  # name: Nested with where 40
-  # query: albums_tracks_genre_some
-  # open_connections: 40
+ - <<: *default_bench
+  name: Nested with where 60
+  query: albums_tracks_genre_some
+  open_connections: 60
+  rps:
+    500
+    1000
+    1500
+    2000
+    2500
+    3000
+    4000
+    5000
