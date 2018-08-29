@@ -58,6 +58,7 @@ resource "aws_db_instance" "postgres_rds" {
 
 resource "aws_instance" "t2-micro-1" {
   depends_on                  = ["aws_db_instance.postgres_rds"]
+  depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "t2.micro"
   availability_zone           = "us-west-2a"
@@ -87,6 +88,7 @@ resource "aws_instance" "t2-micro-1" {
 
 resource "aws_instance" "t2-medium-2" {
   depends_on                  = ["aws_db_instance.postgres_rds"]
+  depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "t2.medium"
   availability_zone           = "us-west-2a"
@@ -116,6 +118,7 @@ resource "aws_instance" "t2-medium-2" {
 
 resource "aws_instance" "m5-xlarge-4" {
   depends_on                  = ["aws_db_instance.postgres_rds"]
+  depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
   instance_type               = "m5.xlarge"
   availability_zone           = "us-west-2a"
@@ -162,8 +165,8 @@ resource "aws_instance" "m5-2xlarge-8" {
       "echo -n postgres://${aws_db_instance.postgres_rds.username}:${aws_db_instance.postgres_rds.password}@${aws_db_instance.postgres_rds.address}:${aws_db_instance.postgres_rds.port}/${aws_db_instance.postgres_rds.name} > ~/postgres_credentials",
 			"sleep 100",
       "sudo chown ubuntu:ubuntu -R ~/aws-benchmarks",
-			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/hasura/provision/test.sh",
-      "~ubuntu/aws-benchmarks/testcandidates/hasura/provision/test.sh 8"
+			"sudo chmod +x ~ubuntu/aws-benchmarks/testcandidates/hasura/provision/test-postgres.sh",
+      "~ubuntu/aws-benchmarks/testcandidates/hasura/provision/test-postgres.sh 8"
     ]
     connection {
       user = "ubuntu"
@@ -178,7 +181,7 @@ resource "aws_instance" "hasura_benchmarker" {
   depends_on                  = ["aws_instance.m5-xlarge-4"]
   depends_on                  = ["aws_instance.m5-2xlarge-8"]
   ami                         = "ami-84633afc"
-  instance_type               = "t2.micro"
+  instance_type               = "m5.2xlarge"
   availability_zone           = "us-west-2a"
   key_name                    = "aws-bench"
   vpc_security_group_ids      = ["${aws_security_group.graphql_bench.id}"]
@@ -196,7 +199,7 @@ resource "aws_instance" "hasura_benchmarker" {
       "sed -i.bak 's/url1: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.t2-micro-1.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws-benchmarks/testcandidates/bench.yaml",
       "sed -i.bak 's/url2: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.t2-medium-2.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws-benchmarks/testcandidates/bench.yaml",
       "sed -i.bak 's/url3: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-xlarge-4.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws-benchmarks/testcandidates/bench.yaml",
-      "sed -i.bak 's/url4: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-4xlarge-16.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws-benchmarks/testcandidates/bench.yaml",
+      "sed -i.bak 's/url4: \\(.*\\)$/url: http:\\/\\/\\${aws_instance.m5-2xlarge-8.public_dns}:8080\\/v1alpha1\\/graphql/' ~/aws-benchmarks/testcandidates/bench.yaml",
     ]
 
 
